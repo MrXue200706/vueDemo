@@ -1,6 +1,6 @@
 <template>
     <main>
-        <h1>测试脚手架</h1>
+        <app-header></app-header>
     </main>
 </template>
 
