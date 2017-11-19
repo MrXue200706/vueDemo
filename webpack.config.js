@@ -1,34 +1,69 @@
-const path=require('path');
-const HtmlWP=require('html-webpack-plugin');
-const CleanWP=require('clean-webpack-plugin');
+const path = require('path');
+const HtmlWP = require('html-webpack-plugin');
+const CleanWP = require('clean-webpack-plugin');
 
-module.exports={
-    //打包的入口,要用绝对路径，path.resolve(__dirname,url)转换为绝对路径
-    entry:path.resolve(__dirname,'./src/js/main.js'),
-    //输出路径,文件名
-    output:{
-        path:path.resolve(__dirname,'./dist'),
-        filename:'bundle.js'
+module.exports = {
+    // 打包的入口文件
+    entry: path.resolve(__dirname, './src/js/main.js'),
+    // 输出
+    output: {
+        path: path.resolve(__dirname, './dist'),
+        filename: 'bundle.js'
     },
-    //插件配置
-    plugins:[
-        //配置自动注入js的html
+    // 插件配置
+    plugins: [
         new HtmlWP({
-            template:'./src/index.html',//注入的html文件，打包后的html还是会去dist目录
-            filename:'index.html',//打包后的文件名
-            inject:'body'//注入js的位置
+            template: './src/index.html',
+            filename: 'index.html',
+            inject: 'body'
         }),
-        //配置清理插件
         new CleanWP(['dist'])
     ],
-    //loader模块配置
-    module:{
-        //模块规则
-        rules:[
+    // 模块配置
+    module: {
+
+        // 配置loader规则
+        rules: [
+
+            // css
             {
-                test:/\.css$/,
-                use:[]
+                test: /\.css$/,
+                use: [ 'style-loader', 'css-loader' ]
+            },
+
+            // less
+            {
+                test: /\.less$/,
+                use: [ 'style-loader', 'css-loader', 'less-loader' ]
+            },
+
+            // html
+            {
+                test: /\.(html|tpl)$/,
+                use: [ 'html-loader' ]
+            },
+
+            // 静态资源引用
+            {
+                test: /\.(png|jpeg|gif|jpg|svg|mp3)$/,
+                use: [ 
+                    { loader: 'url-loader', options: { limit: 10240 } } // 小于10KB的打包
+                ]
+            },
+
+            // js
+            {
+                test: /\.js$/,
+                use: [ 'babel-loader' ],
+                exclude: path.resolve(__dirname, 'node_modules')
+            },
+
+            // vue
+            {
+                test: /\.vue$/,
+                use: [ 'vue-loader' ]
             }
+
         ]
     }
-}
+};
