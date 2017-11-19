@@ -1,7 +1,7 @@
 <template>
     <header class="mint-header is-fixed">
         <h1 class="mint-header-title">
-            头部
+            传智播客
         </h1>
     </header>
 </template>
