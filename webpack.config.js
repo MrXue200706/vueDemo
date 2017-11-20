@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWP = require('html-webpack-plugin');
 const CleanWP = require('clean-webpack-plugin');
+const webpack=require('webpack');
 
 module.exports = {
     // 打包的入口文件
@@ -17,8 +18,15 @@ module.exports = {
             filename: 'index.html',
             inject: 'body'
         }),
-        new CleanWP(['dist'])
+        new CleanWP(['dist']),
+        new webpack.HotModuleReplacementPlugin()
     ],
+    devServer:{
+        historyApiFallback:true,
+        hot:true,
+        inline:true,
+        progress:true,//报错无法识别，删除后也能正常刷新
+    },
     // 模块配置
     module: {
 
