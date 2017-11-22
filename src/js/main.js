@@ -18,11 +18,13 @@ Vue.use(Filter);
 //导入配置
 import routerConfig from '../router';
 import apiConfig from './api_config';
+import store from './localStore.js';
 
 
 //将axios注入VUE的原型中，这样其他组件都可以使用
 Vue.prototype.axios=axios;
 Vue.prototype.api=apiConfig;
+Vue.prototype.store=store;
 
 //导入根组件
 import AppComponent from '../component/App.vue';

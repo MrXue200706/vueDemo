@@ -1,22 +1,22 @@
 <template>
     <footer>
         <nav class="mui-bar mui-bar-tab">
-            <a class="mui-tab-item" href="#tabbar">
+            <router-link class='mui-tab-item' to="/" >
                 <span class="mui-icon mui-icon-home"></span>
                 <span class="mui-tab-label">首页</span>
-            </a>
-            <a class="mui-tab-item mui-active" href="#tabbar-with-chat">
+            </router-link>
+            <router-link class="mui-tab-item mui-active" to="/buy">
                 <span class="mui-icon mui-icon-extra mui-icon-extra-gift"></span>
                 <span class="mui-tab-label">商品购买</span>
-            </a>
-            <a class="mui-tab-item" href="#tabbar-with-contact">
+            </router-link>
+            <router-link class="mui-tab-item" to="/shopCar" >
                 <span class="mui-icon mui-icon-extra mui-icon-extra-cart"><span class="mui-badge">9</span></span>
                 <span class="mui-tab-label">购物车</span>
-            </a>
-            <a class="mui-tab-item" href="#tabbar-with-map">
+            </router-link>
+            <router-link class="mui-tab-item" to="/setting" >
                 <span class="mui-icon mui-icon-gear"></span>
                 <span class="mui-tab-label">设置</span>
-            </a>
+            </router-link>
         </nav>
         <i></i>
     </footer>
@@ -24,7 +24,22 @@
 
 <script>
 export default {
-
+    data(){
+        return{
+            cls:'mui-tab-item',
+            
+        }
+    },
+    methods:{
+        actived(){
+            
+        }
+    },
+    watch:{
+        tabsId(){
+            
+        }
+    }
 }
 </script>
 
