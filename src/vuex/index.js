@@ -11,7 +11,7 @@ export default{
     getters:{
         //计算购买总数
         getGoodsTotal(state){
-            return Object.values(state.goods).reduce((sum,val)=>sum+=val,0)
+            return Object.values(state.goods).reduce((sum,val)=>sum+val,0)
         }
     },
     //定义修改方法集，相当于methods，但是只能用于修改状态值

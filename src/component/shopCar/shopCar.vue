@@ -12,7 +12,7 @@
             <li>￥{{ item.sell_price }}</li>
             <li>
                 <div>
-                    <app-numbox @change="changeData(item.id,$event)" v-bind:initVal="itemGoods[item.id]"></app-numbox>
+                    <app-numbox @change="changeData(item.id,$event)" v-bind:initVal="$store.state.goods[item.id]"></app-numbox>
                 </div>
             </li>
             <li>
@@ -46,7 +46,7 @@ export default {
     data(){
       return{
         buyGoodsList:[],
-        itemGoods:(storage.get('goods')),
+        // itemGoods:(storage.get('goods')),
       }
     },
     methods:{
@@ -62,12 +62,18 @@ export default {
       },
       //输入框数据发生变化时取出数据，更改数据，再存入localStorage
       changeData(id,value){
-        this.itemGoods[id]=value;
-        console.log(this.buyGoodsList);
+        // this.itemGoods[id]=value;//不用vuex时的方法
+        this.$store.commit('upBuyData',{
+          id:id,
+          total:value
+        })
       },
       //删除购买数据
       del(id){
-        Vue.delete(this.itemGoods,id);
+        // Vue.delete(this.itemGoods,id);//不用vuex时的方法
+        this.$store.commit('delBuyData',{
+          id:id
+        })
         this.buyGoodsList=this.buyGoodsList.filter(v => v.id != id);
       }
     },
@@ -77,8 +83,8 @@ export default {
     computed:{
       //实时获取选择的总数
       selectedGoodsTotal() {//==============>此方法？
-        return this.buyGoodsList.reduce((sum, goods) => {
-          return goods.isSelected? sum + this.itemGoods[goods.id] : sum;
+        return this.buyGoodsList.reduce((sum, good) => {
+          return good.isSelected? sum + this.$store.state.goods[good.id] : sum;
         }, 0);
       },
       //实时获取选择的商品总价格:
@@ -86,22 +92,22 @@ export default {
       //相应的id的数量，累加到这计算属性里
       selectedGoodsPriceTotal(){//总价
         let sum=0;
-        this.buyGoodsList.forEach((goods)=>{
-          if(goods.isSelected){
-            sum+=(this.itemGoods[goods.id]*goods.sell_price);
+        this.buyGoodsList.forEach((good)=>{
+          if(good.isSelected){
+            sum+=(this.$store.state.goods[good.id]*good.sell_price);
           }
         })
         return sum;
       }
     },
-    watch:{
-      itemGoods:{//监听对象变化需要深度监听
-        handler(){
-          storage.set('goods',this.itemGoods);
-        },
-        deep:true
-      }
-    }
+    // watch:{
+    //   itemGoods:{//监听对象变化需要深度监听
+    //     handler(){
+    //       storage.set('goods',this.itemGoods);
+    //     },
+    //     deep:true
+    //   }
+    // }
 }
 </script>
 

@@ -74,9 +74,13 @@ export default {
         },
         addShopcart(){
             //先取出数据，再合并
-            let oldData=storage.get('goods') || {};
-            oldData[this.id]=this.buyCount;
-            storage.set('goods',oldData);
+            // let oldData=storage.get('goods') || {};
+            // oldData[this.id]=this.buyCount;
+            // storage.set('goods',oldData);
+            this.$store.commit('upBuyData',{
+                id:this.id,
+                total:this.buyCount
+            })
         },
     },
     created(){
