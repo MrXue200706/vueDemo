@@ -14,6 +14,7 @@ import settingComponent from "../component/setting/setting.vue";
 
 
 export default{
+    linkActiveClass:'mui-active',
     routes:[
         //主页
         {path:'/',redirect:'/index'},

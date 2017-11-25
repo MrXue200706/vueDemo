@@ -71,7 +71,6 @@ export default {
 @height:260px;
 article{
     height:@height;
-    margin-top: 40px;
     img{
         width: 100%;
     }

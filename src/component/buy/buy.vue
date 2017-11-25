@@ -54,7 +54,6 @@ export default {
                 if(res.data.message.length==0){
                     this.lastPage=true;
                 }
-                console.log(this.goodsList);
             })
         },
         loadMore(){
@@ -68,7 +67,37 @@ export default {
     }
 };
 </script>
-
-<style>
-
+<style lang="less" scoped>
+.mui-card {
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, .3);
+}
+.mui-card-header {
+  padding: 8px;
+  /*height: 100px;*/
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+.mui-card-content {
+  text-align: center;
+  .price {
+    margin-bottom: 4px;
+    color: #000;
+    span {
+      color: red;
+    }
+  }
+  .tip {
+    overflow: hidden;
+    padding: 0 8px;
+    font-size: 12px;
+    span:first-child {
+      float: left;
+    }
+    span:last-child {
+      float: right;
+    }
+  }
+}
 </style>

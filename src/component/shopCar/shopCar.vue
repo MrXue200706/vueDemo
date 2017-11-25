@@ -12,14 +12,11 @@
             <li>￥{{ item.sell_price }}</li>
             <li>
                 <div>
-                    <app-numbox></app-numbox>
-                  <!-- <button class="mui-btn mui-btn-numbox-minus">-</button>
-                  <input class="mui-input-numbox" type="number">
-                  <button class="mui-btn mui-btn-numbox-plus">+</button> -->
+                    <app-numbox @change="changeData(item.id,$event)" v-bind:initVal="itemGoods[item.id]"></app-numbox>
                 </div>
             </li>
             <li>
-              <a href="javascript:void(0)">删除</a>
+              <a href="javascript:void(0)" @click="del(item.id)">删除</a>
             </li>
           </ul>
         </div>
@@ -43,57 +40,67 @@
 </template>
 
 <script>
+import storage from '../../js/localStore.js';
+import Vue from 'vue';
 export default {
     data(){
-        return{
-            buyGoodsList:[],
-        }
+      return{
+        buyGoodsList:[],
+        itemGoods:(storage.get('goods')),
+      }
     },
     methods:{
-        getGoods(){
-            let goods= JSON.parse(this.store.get('goods'));
-            let ids=Object.keys(goods).join(',');
-            this.axios.get(this.api.shopcL+ids)
-            .then(res => {
-                this.buyGoodsList=res.data.message;
-                res.data.message.forEach(goods => goods.isSelected = true);//给每项添加isSelected属性========
-            })
-        },
-        getGoodsById(id){//根据id获取存在localstorage里面的数量，===>获取回来的是字符串，一定要转对象
-            return JSON.parse(this.store.get('goods'))[id];
-        }
-        
+      //打开即获取数据列表
+      getGoods(){
+        let goods= (storage.get('goods')) || {};
+        let ids=Object.keys(goods).join(',') || 1;
+        this.axios.get(this.api.shopcL+ids)
+        .then(res => {
+          res.data.message.forEach(goods => goods.isSelected = true);//给每项添加isSelected属性========
+          this.buyGoodsList=res.data.message;
+        });
+      },
+      //输入框数据发生变化时取出数据，更改数据，再存入localStorage
+      changeData(id,value){
+        this.itemGoods[id]=value;
+        console.log(this.buyGoodsList);
+      },
+      //删除购买数据
+      del(id){
+        Vue.delete(this.itemGoods,id);
+        this.buyGoodsList=this.buyGoodsList.filter(v => v.id != id);
+      }
     },
     created(){
         this.getGoods();
     },
     computed:{
-        //遍历勾选上的商品，通过id获取存在localstorage里面的数量，跟返回的价格计算出总价
-        // selectedGoodsTotal(){//数量
-        //     let sum=0;
-        //     this.buyGoodsList.forEach((goods)=>{
-        //         // console.log(goods.id.toString());
-        //         if(goods.isSelected){
-        //             sum+=this.getGoodsById(goods.id);
-        //         }
-        //     })
-        //     return sum;
-        // },
-        selectedGoodsTotal() {//==============>此方法？
-            return this.buyGoodsList.reduce((sum, goods) => {
-                return goods.isSelected? sum + this.getGoodsById(goods.id) : sum;
-            }, 0);
+      //实时获取选择的总数
+      selectedGoodsTotal() {//==============>此方法？
+        return this.buyGoodsList.reduce((sum, goods) => {
+          return goods.isSelected? sum + this.itemGoods[goods.id] : sum;
+        }, 0);
+      },
+      //实时获取选择的商品总价格:
+      //遍历buyGoodsList里面的对象，如果isSelected=true则选中，按选中的商品的id获取localStorage里面
+      //相应的id的数量，累加到这计算属性里
+      selectedGoodsPriceTotal(){//总价
+        let sum=0;
+        this.buyGoodsList.forEach((goods)=>{
+          if(goods.isSelected){
+            sum+=(this.itemGoods[goods.id]*goods.sell_price);
+          }
+        })
+        return sum;
+      }
+    },
+    watch:{
+      itemGoods:{//监听对象变化需要深度监听
+        handler(){
+          storage.set('goods',this.itemGoods);
         },
-        selectedGoodsPriceTotal(){//总价
-            let sum=0;
-            this.buyGoodsList.forEach((goods)=>{
-                // console.log(goods.id.toString());
-                if(goods.isSelected){
-                    sum+=(this.getGoodsById(goods.id)*goods.sell_price);
-                }
-            })
-            return sum;
-        }
+        deep:true
+      }
     }
 }
 </script>

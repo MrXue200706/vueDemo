@@ -1,11 +1,11 @@
 <template>
     <footer>
         <nav class="mui-bar mui-bar-tab">
-            <router-link class='mui-tab-item' to="/" >
+            <router-link class='mui-tab-item' to="/index" >
                 <span class="mui-icon mui-icon-home"></span>
                 <span class="mui-tab-label">首页</span>
             </router-link>
-            <router-link class="mui-tab-item mui-active" to="/buy">
+            <router-link class="mui-tab-item" to="/buy">
                 <span class="mui-icon mui-icon-extra mui-icon-extra-gift"></span>
                 <span class="mui-tab-label">商品购买</span>
             </router-link>
@@ -26,20 +26,9 @@
 export default {
     data(){
         return{
-            cls:'mui-tab-item',
-            
+
         }
     },
-    methods:{
-        actived(){
-            
-        }
-    },
-    watch:{
-        tabsId(){
-            
-        }
-    }
 }
 </script>
 

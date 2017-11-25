@@ -5,7 +5,7 @@ export default{
     get(key){
         let value=localStorage.getItem(key);
         try{
-            value=JSON.parse(vulue);//undefind不能使用JSON.parse
+            value=JSON.parse(value);//undefind不能使用JSON.parse
         }finally{
             return value;
         }        

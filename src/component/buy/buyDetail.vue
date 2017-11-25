@@ -48,13 +48,14 @@
 
 <script>
 //引入组件
+import storage from '../../js/localStore.js'
 import introComponent from './son/intro.vue';
 export default {
     data(){
         return{
             lunbos:[],
             goodsPrice:{},
-            buyCount:1,
+            buyCount: ((storage.get('goods') || {})[this.$route.params.id]) || 1,
             navbarSelector:'commont',
             id:this.$route.params.id,
         }
@@ -73,19 +74,14 @@ export default {
         },
         addShopcart(){
             //先取出数据，再合并
-            let oldData=JSON.parse(this.store.get('goods') || {});//获取的是字符串，需要转为对象;没有就返回空数组，避免报错;
+            let oldData=storage.get('goods') || {};
             oldData[this.id]=this.buyCount;
-            this.store.set('goods',oldData);
+            storage.set('goods',oldData);
         },
-        getCount(goods){
-            let count=JSON.parse(this.store.get('goods') || {});
-            this.buyCount=count[this.id];
-        }
     },
     created(){
         this.getLunbos();
         this.getGoodsPrice();
-        this.getCount('goods');
     },
     //注册组件
     components:{
